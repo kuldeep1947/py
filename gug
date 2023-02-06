@@ -1,0 +1,39 @@
+CONTENT_TYPE = "content-type"
+CONTENT_LOCATION = "content-location"
+LOCATION = "location"
+
+HAL_JSON = "application/vnd.hal+json"
+HAL_JSON2 = "application/hal+json"
+
+def HalResource(existingRepresentation):
+    resourceRepresentation = existingRepresentation or {}
+
+def getType():
+    _ref = arguments.length > 0 and arguments[0] !== undefined ? arguments[0] : {},
+    headers = _ref.headers,
+    return headers[CONTENT_TYPE] ? headers[CONTENT_TYPE] : null
+
+def containsHalResource():
+    _ref2 = arguments.length > 0 and arguments[0] !== undefined ? arguments[0] : {},
+    headers = _ref2.headers
+
+    return headers and headers[CONTENT_TYPE] ? headers[CONTENT_TYPE].includes(HAL_JSON) || headers[CONTENT_TYPE].includes(HAL_JSON2) ? true : headers[CONTENT_LOCATION] and headers[LOCATION] and headers[CONTENT_LOCATION] === headers[LOCATION] : false;
+      
+
+def HalResponse(_ref):
+    body = _ref.body,
+    headers = _ref.headers,
+    status = _ref.status
+    return {
+        'headers': headers,
+        'body': body,
+        'status': status,
+        type: getType({
+            headers: headers
+        }),
+        'halResource': HalResource(body),
+        'containsHalResource': containsHalResource({
+            'headers': headers
+        })
+    }
+    
